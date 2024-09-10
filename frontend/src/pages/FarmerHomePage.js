@@ -1,12 +1,27 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FaPlus, FaCommentAlt, FaShoppingCart, FaUsers, FaMicrophone } from 'react-icons/fa';
+import { Routes, Route, Link } from 'react-router-dom';
 
 // Import the images at the top of your file
 import machineImg from '../assets/machine.jpg';
 import fertilizerImg from '../assets/fertilizer.jpg';
 import pesticidesImg from '../assets/pesticides.jpg';
 
+// Pages for Navigation
+const Dashboard = () => <h2>Dashboard Page</h2>;
+const DataAnalytics = () => <h2>Data Analytics Page</h2>;
+const Rewards = () => <h2>Rewards Page</h2>;
+const FarmTour = () => <h2>Farm Tour Page</h2>;
+const FarmingPractices = () => <h2>Farming Practices Page</h2>;
+const Feedback = () => <h2>Feedback Page</h2>;
+
 const FarmerHomePage = () => {
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+
+  const toggleDrawer = () => {
+    setIsDrawerOpen(!isDrawerOpen);
+  };
+
   const handleOrderClick = () => {
     console.log("Order button clicked");
   };
@@ -22,18 +37,34 @@ const FarmerHomePage = () => {
   return (
     <div style={styles.container}>
       <header style={styles.header}>
-        <button style={styles.menuButton}>
+        <button style={styles.menuButton} onClick={toggleDrawer}>
           <span style={styles.menuIcon}>&#9776;</span>
         </button>
         <h1 style={styles.pageTitle}>Farmer Page</h1>
         <div style={styles.userIcon}>
           <img
-            src="{https://via.placeholder.com/30}"
+            src="https://via.placeholder.com/30"
             alt="User"
             style={styles.profileImg}
           />
         </div>
       </header>
+
+      {/* Drawer Navigation */}
+      <div style={{ ...styles.drawer, transform: isDrawerOpen ? 'translateX(0)' : 'translateX(-100%)', visibility: isDrawerOpen ? 'visible' : 'hidden' }}>
+        <h3 style={styles.drawerTitle}>Farmer Profile</h3>
+        <ul style={styles.drawerList}>
+          <li><Link to="/" onClick={toggleDrawer} style={styles.drawerLink}>Dashboard</Link></li>
+          <li><Link to="/analytics" onClick={toggleDrawer} style={styles.drawerLink}>Data Analytics</Link></li>
+          <li><Link to="/rewards" onClick={toggleDrawer} style={styles.drawerLink}>Rewards</Link></li>
+          <li><Link to="/tour" onClick={toggleDrawer} style={styles.drawerLink}>Farm Tour</Link></li>
+          <li><Link to="/practices" onClick={toggleDrawer} style={styles.drawerLink}>Farming Practices</Link></li>
+          <li><Link to="/feedback" onClick={toggleDrawer} style={styles.drawerLink}>Feedback</Link></li>
+        </ul>
+      </div>
+
+      {/* Overlay */}
+      <div style={{ ...styles.overlay, opacity: isDrawerOpen ? 1 : 0, visibility: isDrawerOpen ? 'visible' : 'hidden' }} onClick={toggleDrawer}></div>
 
       {/* Search Section */}
       <div style={styles.searchContainer}>
@@ -121,166 +152,230 @@ const FarmerHomePage = () => {
           <p>Voice Assist</p>
         </button>
       </footer>
+
+      {/* Updated Routes Component */}
+      <Routes>
+        <Route path="/" element={<Dashboard />} />
+        <Route path="/analytics" element={<DataAnalytics />} />
+        <Route path="/rewards" element={<Rewards />} />
+        <Route path="/tour" element={<FarmTour />} />
+        <Route path="/practices" element={<FarmingPractices />} />
+        <Route path="/feedback" element={<Feedback />} />
+      </Routes>
     </div>
   );
 };
-
 const styles = {
   container: {
-    display: 'flex',
-    flexDirection: 'column',
-    minHeight: '100vh',
-    backgroundColor: '#fff',
+    fontFamily: 'Arial, sans-serif',
+    backgroundColor: '#f5f5f5',
+    padding: '0',
+    margin: '0',
+    position: 'relative'
   },
   header: {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: '20px',
-    backgroundColor: '#f0f0f0',
-    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-  },
-  pageTitle: {
-    fontSize: '24px',
-    fontWeight: 'bold',
-    color: '#333',
+    backgroundColor: '#ffffff',
+    padding: '10px 20px',
+    boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
   },
   menuButton: {
     background: 'none',
     border: 'none',
-    fontSize: '24px',
+    fontSize: '1.5em',
+    color: '#2c3e50',
     cursor: 'pointer',
+    transition: 'color 0.3s ease',
+  },
+  menuIcon: {
+    fontSize: '1.5em',
+  },
+  pageTitle: {
+    fontSize: '1.5em',
+    margin: 0,
   },
   userIcon: {
     display: 'flex',
-    justifyContent: 'center',
     alignItems: 'center',
   },
   profileImg: {
     borderRadius: '50%',
   },
-  searchContainer: {
+  drawer: {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    width: '250px',
+    height: '100%',
+    backgroundColor: '#2c3e50',
+    color: '#ecf0f1',
     padding: '20px',
+    boxShadow: '2px 0 5px rgba(0, 0, 0, 0.3)',
+    transition: 'transform 0.3s ease, visibility 0.3s ease',
+  },
+  drawerTitle: {
+    fontSize: '1.5em',
+    marginBottom: '20px',
+    fontWeight: 'bold',
+  },
+  drawerList: {
+    listStyle: 'none',
+    padding: 0,
+  },
+  drawerLink: {
+    color: '#ecf0f1',
+    textDecoration: 'none',
+    fontSize: '1.2em',
+    display: 'block',
+    padding: '10px',
+    borderRadius: '4px',
+    transition: 'background-color 0.3s ease, color 0.3s ease',
+  },
+  drawerLinkHover: {
+    backgroundColor: '#34495e', /* Slightly lighter shade for hover */
+    color: '#ffffff', /* Change text color on hover */
+  },
+  drawerLinkActive: {
+    backgroundColor: '#16a085', /* Highlight color for the active link */
+    color: '#ffffff',
+  },
+  overlay: {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    background: 'rgba(0, 0, 0, 0.5)',
+    visibility: 'hidden',
+    opacity: 0,
+    transition: 'visibility 0.3s ease, opacity 0.3s ease',
+    zIndex: 999,
+  },
+  searchContainer: {
     display: 'flex',
-    flexDirection: 'column',
-    gap: '15px',
+    justifyContent: 'space-between',
+    padding: '20px',
   },
   searchInput: {
-    width: '100%',
-    padding: '12px',
-    border: '1px solid #ccc',
-    borderRadius: '5px',
-    fontSize: '16px',
+    width: '48%',
+    padding: '10px',
+    border: '1px solid #ddd',
+    borderRadius: '4px',
   },
   horizontalScroll: {
-    display: 'flex',
-    overflowX: 'scroll',
-    padding: '20px',
-    gap: '10px',
-    backgroundColor: '#f9f9f9',
+    overflowX: 'auto',
+    whiteSpace: 'nowrap',
+    padding: '10px',
+    backgroundColor: '#ffffff',
+    boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
   },
   scrollItem: {
-    minWidth: '200px',
-    padding: '15px',
-    backgroundColor: '#ddd',
-    borderRadius: '8px',
-    textAlign: 'center',
+    display: 'inline-block',
+    padding: '10px 20px',
+    fontSize: '1.2em',
+    fontWeight: 'bold',
   },
   categoriesContainer: {
     display: 'flex',
     justifyContent: 'space-around',
-    marginTop: '20px',
+    padding: '20px',
   },
   categoryCard: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
+    textAlign: 'center',
+    width: '30%',
+    borderRadius: '8px',
+    overflow: 'hidden',
+    boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
   },
   categoryImage: {
-    width: '100px',
-    height: '100px',
-    borderRadius: '50%',
+    width: '100%',
+    height: 'auto',
   },
   categoryTitle: {
-    marginTop: '10px',
-    fontSize: '16px',
-    color: '#333',
+    padding: '10px',
+    fontSize: '1.2em',
+    backgroundColor: '#ffffff',
+    borderTop: '1px solid #ddd',
   },
   sectionTitle: {
-    fontSize: '22px',
-    fontWeight: '600',
-    color: '#333',
-    textAlign: 'center',
-    marginTop: '30px',
+    fontSize: '1.5em',
+    margin: '20px',
   },
   recentActivityContainer: {
     padding: '20px',
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '15px',
   },
   activityCard: {
+    backgroundColor: '#ffffff',
     padding: '15px',
-    backgroundColor: '#f0f0f0',
-    borderRadius: '8px',
-    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+    borderRadius: '4px',
+    boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
+    marginBottom: '10px',
   },
   activityText: {
-    fontSize: '16px',
-    color: '#555',
+    margin: 0,
   },
   floatingButtons: {
     position: 'fixed',
-    bottom: '100px',
+    bottom: '20px',
     right: '20px',
     display: 'flex',
     flexDirection: 'column',
     gap: '10px',
   },
   floatingBtnBlue: {
-    backgroundColor: '#00aaff',
-    width: '56px',
-    height: '56px',
-    borderRadius: '50%',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: '#3498db',
     border: 'none',
+    borderRadius: '50%',
+    width: '50px',
+    height: '50px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    boxShadow: '0 2px 5px rgba(0, 0, 0, 0.3)',
     cursor: 'pointer',
+    transition: 'background-color 0.3s ease',
   },
   floatingBtnGreen: {
-    backgroundColor: '#00cc66',
-    width: '56px',
-    height: '56px',
-    borderRadius: '50%',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: '#2ecc71',
     border: 'none',
+    borderRadius: '50%',
+    width: '50px',
+    height: '50px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    boxShadow: '0 2px 5px rgba(0, 0, 0, 0.3)',
     cursor: 'pointer',
+    transition: 'background-color 0.3s ease',
   },
   footer: {
     position: 'fixed',
-    bottom: '0',
+    bottom: 0,
+    left: 0,
     width: '100%',
+    backgroundColor: '#ffffff',
+    boxShadow: '0 -2px 5px rgba(0, 0, 0, 0.1)',
     display: 'flex',
     justifyContent: 'space-around',
+    alignItems: 'center',
     padding: '10px 0',
-    backgroundColor: '#f8f8f8',
-    boxShadow: '0 -2px 6px rgba(0, 0, 0, 0.1)',
+    zIndex: 1000,
   },
   footerButton: {
+    background: 'none',
+    border: 'none',
+    fontSize: '1em',
+    color: '#2c3e50',
+    cursor: 'pointer',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    background: 'none',
-    border: 'none',
-    cursor: 'pointer',
-    color: '#666',
+    transition: 'color 0.3s ease',
   },
   footerIcon: {
-    fontSize: '20px',
-    marginBottom: '5px',
+    fontSize: '1.5em',
   },
 };
 
